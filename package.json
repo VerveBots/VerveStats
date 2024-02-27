@@ -1,0 +1,29 @@
+{
+  "name": "tsbot",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "Ystart": "rimraf ./dist && yarn build && node --no-warnings dist/index.js",
+    "start": "rimraf ./dist && npm run build && node --no-warnings dist/index.js",
+    "lint": "eslint src --ext .ts --fix",
+    "pretty": "prettier -w ./src"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5",
+    "mongoose": "^8.2.0",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/parser": "^7.0.2",
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "rimraf": "^5.0.5",
+    "tsc-alias": "^1.8.8",
+    "typescript": "^5.3.3"
+  }
+}
