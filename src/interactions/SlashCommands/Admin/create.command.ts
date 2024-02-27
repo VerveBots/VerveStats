@@ -60,7 +60,7 @@ export default new Command({
           deny: ["Connect"],
         },
       ],
-      position: 0,
+      position: -1,
       reason: `${interaction.user.tag} created a ServerStats category`,
     });
     category.categoryId = categoryChannel.id;
