@@ -27,6 +27,7 @@ export default new Event({
         const guild = await client.guilds.fetch({
           guild: category.guildId,
           withCounts: true,
+          force: true,
         });
         const channel = guild.channels.cache.get(category.categoryId);
         if (channel?.type !== ChannelType.GuildCategory) {
