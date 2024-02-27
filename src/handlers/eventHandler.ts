@@ -3,14 +3,14 @@ import fs from "fs/promises";
 import Client from "@/structures/Client.js";
 import Event from "@/structures/Event.js";
 async function eventHandler(client: Client) {
-  const dirs = await fs.readdir("./dist/Events");
+  const dirs = await fs.readdir("./dist/events");
 
   dirs.forEach(async (dir) => {
-    const files = await fs.readdir(`./dist/Events/${dir}`);
+    const files = await fs.readdir(`./dist/events/${dir}`);
 
     files.forEach(async (file: string) => {
       const eventFile: Event<keyof ClientEvents> = await import(
-        `../Events/${dir}/${file}`
+        `../events/${dir}/${file}`
       ).then((imported) => imported.default);
       const { event } = eventFile;
       client.logger.log({
