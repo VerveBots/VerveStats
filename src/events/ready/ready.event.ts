@@ -24,7 +24,10 @@ export default new Event({
     cron.schedule("*/5 * * * *", async () => {
       const categories = await CategoryModel.find();
       categories.forEach(async (category) => {
-        const guild = await client.guilds.fetch(category.guildId);
+        const guild = await client.guilds.fetch({
+          guild: category.guildId,
+          withCounts: true,
+        });
         const channel = guild.channels.cache.get(category.categoryId);
         if (channel?.type !== ChannelType.GuildCategory) {
           await CategoryModel.findOneAndDelete({
