@@ -28,10 +28,12 @@ export default new Event({
           withCounts: true,
           force: true,
         });
+        console.log("stop 1");
         if (!category.membersChannelId) return;
         const membersChannel = client.channels.cache.get(
           category.membersChannelId
         );
+        console.log("stop 2");
         if (!membersChannel) return;
         if (membersChannel.isDMBased()) return;
         await membersChannel.setName(
@@ -40,6 +42,8 @@ export default new Event({
             guild.memberCount.toLocaleString("en-US")
           )
         );
+        console.log("Set");
+        console.log(guild.memberCount);
       });
     });
   },
