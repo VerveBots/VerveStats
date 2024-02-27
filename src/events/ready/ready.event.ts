@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CategoryModel } from "@/schemas/category.js";
 import Event from "@/structures/Event.js";
-import { ChannelType } from "discord.js";
 import cron from "node-cron";
 
 export default new Event({
@@ -29,18 +28,13 @@ export default new Event({
           withCounts: true,
           force: true,
         });
-        const channel = guild.channels.cache.get(category.categoryId);
-        if (channel?.type !== ChannelType.GuildCategory) {
-          await CategoryModel.findOneAndDelete({
-            categoryId: category.categoryId,
-          });
-          return;
-        }
         if (!category.membersChannelId) return;
-        const membersChannel = channel.children.cache.get(
+        const membersChannel = client.channels.cache.get(
           category.membersChannelId
         );
-        await membersChannel?.setName(
+        if (!membersChannel) return;
+        if (membersChannel.isDMBased()) return;
+        await membersChannel.setName(
           category.membersNameTemplate.replaceAll(
             "{m}",
             guild.memberCount.toLocaleString("en-US")
