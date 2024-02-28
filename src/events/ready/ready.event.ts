@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import hasPerms from "@/functions/hasPerms.js";
 import replacePrefixes from "@/functions/replacePrefixes.js";
 import { CategoryModel } from "@/schemas/category.js";
 import Event from "@/structures/Event.js";
-import { GuildChannel, PermissionFlagsBits } from "discord.js";
+import { PermissionFlagsBits } from "discord.js";
 import cron from "node-cron";
 
 export default new Event({
@@ -34,10 +35,15 @@ export default new Event({
           const channel = guild.channels.cache.get(ch.channelId);
           if (!channel) {
             category.channels.splice(i, 1);
+            await category.save();
             return;
           }
-          if (!channel.isVoiceBased() || !channel.isTextBased()) {
+          if (
+            (!channel.isVoiceBased() && !channel.isTextBased()) ||
+            channel.isThread()
+          ) {
             category.channels.splice(i, 1);
+            await category.save();
             return;
           }
           if (
@@ -45,9 +51,9 @@ export default new Event({
               PermissionFlagsBits.ManageChannels,
               PermissionFlagsBits.Connect,
             ])
-          ) {
+          )
             return;
-          }
+
           const members = await guild.members.fetch();
 
           const name = replacePrefixes(ch.template, {
@@ -60,6 +66,7 @@ export default new Event({
               .size.toLocaleString("en-US"),
           });
           if (name === channel.name) return;
+
           try {
             await channel.setName(name);
           } catch (err) {
@@ -70,10 +77,3 @@ export default new Event({
     });
   },
 });
-function hasPerms(channel: GuildChannel, permissions: bigint[]) {
-  const { me } = channel.guild.members;
-  if (!me) return false;
-  return permissions.every((permission) =>
-    channel.permissionsFor(me).has(permission)
-  );
-}
