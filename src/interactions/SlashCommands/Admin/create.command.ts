@@ -80,6 +80,7 @@ export default new Command({
       category.membersChannelId = channel.id;
       category.membersNameTemplate = name;
     }
+    await category.save();
     await interaction.editReply("Done making channels!");
   },
 });
