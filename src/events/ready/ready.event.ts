@@ -54,11 +54,8 @@ export default new Event({
         if (name === membersChannel.name) return;
         try {
           await membersChannel.setName(name);
-          client.logger.info(
-            `Changed name for guild ${membersChannel.guild.name}: ${membersChannel.name} -> ${name}`
-          );
         } catch (err) {
-          client.logger.error(err);
+          console.error(err);
         }
       });
     });
