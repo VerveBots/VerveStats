@@ -2,8 +2,11 @@ import { Schema, model } from "mongoose";
 interface ICategoryModel {
   guildId: string;
   categoryId: string;
-  membersChannelId?: string;
-  membersNameTemplate: string;
+  channels: Channels[];
+}
+interface Channels {
+  template: string;
+  channelId: string;
 }
 const schema = new Schema<ICategoryModel>({
   guildId: {
@@ -14,14 +17,14 @@ const schema = new Schema<ICategoryModel>({
     required: true,
     type: String,
   },
-  membersChannelId: {
-    required: false,
-    type: String,
-  },
-  membersNameTemplate: {
-    required: false,
-    type: String,
-    default: "Members: {m}",
+  channels: {
+    type: [
+      {
+        template: String,
+        channelId: String,
+      },
+    ],
+    default: [],
   },
 });
 export const CategoryModel = model<ICategoryModel>("categories", schema);

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import replacePrefixes from "@/functions/replacePrefixes.js";
 import { CategoryModel } from "@/schemas/category.js";
 import Event from "@/structures/Event.js";
 import { GuildChannel, PermissionFlagsBits } from "discord.js";
@@ -29,34 +30,42 @@ export default new Event({
           withCounts: true,
           force: true,
         });
-        if (!category.membersChannelId) return;
-        let membersChannel = client.channels.cache.get(
-          category.membersChannelId
-        );
-        if (!membersChannel) return;
-        if (membersChannel.isDMBased()) return;
-        const { me } = membersChannel.guild.members;
-        if (!me) return;
-        if (!membersChannel.isVoiceBased() || !membersChannel.isTextBased())
-          return;
-        if (
-          !hasPerms(membersChannel, [
-            PermissionFlagsBits.ManageChannels,
-            PermissionFlagsBits.Connect,
-          ])
-        ) {
-          return;
-        }
-        const name = category.membersNameTemplate.replaceAll(
-          "{m}",
-          guild.memberCount.toLocaleString("en-US")
-        );
-        if (name === membersChannel.name) return;
-        try {
-          await membersChannel.setName(name);
-        } catch (err) {
-          console.error(err);
-        }
+        category.channels.forEach(async (ch, i) => {
+          const channel = guild.channels.cache.get(ch.channelId);
+          if (!channel) {
+            category.channels.splice(i, 1);
+            return;
+          }
+          if (!channel.isVoiceBased() || !channel.isTextBased()) {
+            category.channels.splice(i, 1);
+            return;
+          }
+          if (
+            !hasPerms(channel, [
+              PermissionFlagsBits.ManageChannels,
+              PermissionFlagsBits.Connect,
+            ])
+          ) {
+            return;
+          }
+          const members = await guild.members.fetch();
+
+          const name = replacePrefixes(ch.template, {
+            "{mc}": guild.memberCount.toLocaleString("en-US"),
+            "{m}": members
+              .filter((m) => !m.user.bot)
+              .size.toLocaleString("en-US"),
+            "{b}": members
+              .filter((m) => m.user.bot)
+              .size.toLocaleString("en-US"),
+          });
+          if (name === channel.name) return;
+          try {
+            await channel.setName(name);
+          } catch (err) {
+            console.error(err);
+          }
+        });
       });
     });
   },
