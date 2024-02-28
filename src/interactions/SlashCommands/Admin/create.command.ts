@@ -68,13 +68,15 @@ export default new Command({
       !category.membersChannelId ||
       !interaction.guild.channels.cache.has(category.membersChannelId)
     ) {
+      const guild = await interaction.client.guilds.fetch({
+        guild: interaction.guildId,
+        withCounts: true,
+        force: true,
+      });
       const name = interaction.options.getString("members") || "Members: {m}";
       const channel = await categoryChannel.children.create({
         type: ChannelType.GuildVoice,
-        name: name.replaceAll(
-          "{m}",
-          interaction.guild.memberCount.toLocaleString("en-US")
-        ),
+        name: name.replaceAll("{m}", guild.memberCount.toLocaleString("en-US")),
         reason: `${interaction.user.tag} created a ServerStats category`,
       });
       category.membersChannelId = channel.id;
