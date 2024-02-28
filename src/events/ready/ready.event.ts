@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CategoryModel } from "@/schemas/category.js";
 import Event from "@/structures/Event.js";
+import { PermissionFlagsBits } from "discord.js";
 import cron from "node-cron";
 
 export default new Event({
@@ -34,6 +35,15 @@ export default new Event({
         );
         if (!membersChannel) return;
         if (membersChannel.isDMBased()) return;
+        const { me } = membersChannel.guild.members;
+        if (!me) return;
+        if (
+          !membersChannel
+            .permissionsFor(me)
+            .has(PermissionFlagsBits.ManageChannels)
+        ) {
+          return;
+        }
         try {
           await membersChannel.setName(
             category.membersNameTemplate.replaceAll(
@@ -42,7 +52,7 @@ export default new Event({
             )
           );
         } catch (err) {
-          return;
+          client.logger.error(err);
         }
       });
     });
