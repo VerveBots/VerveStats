@@ -44,6 +44,11 @@ export default new Event({
         ) {
           return;
         }
+        const name = category.membersNameTemplate.replaceAll(
+          "{m}",
+          guild.memberCount.toLocaleString("en-US")
+        );
+        if (name === membersChannel.name) return;
         try {
           await membersChannel.setName(
             category.membersNameTemplate.replaceAll(
