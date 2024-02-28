@@ -78,6 +78,12 @@ export default new Command({
         type: ChannelType.GuildVoice,
         name: name.replaceAll("{m}", guild.memberCount.toLocaleString("en-US")),
         reason: `${interaction.user.tag} created a ServerStats category`,
+        permissionOverwrites: [
+          {
+            id: interaction.client.application.id,
+            allow: [PermissionFlagsBits.ManageChannels],
+          },
+        ],
       });
       category.membersChannelId = channel.id;
       category.membersNameTemplate = name;
