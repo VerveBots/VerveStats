@@ -81,7 +81,14 @@ export default new Command({
         permissionOverwrites: [
           {
             id: interaction.client.application.id,
-            allow: [PermissionFlagsBits.ManageChannels],
+            allow: [
+              PermissionFlagsBits.ManageChannels,
+              PermissionFlagsBits.Connect,
+            ],
+          },
+          {
+            id: interaction.guildId,
+            deny: [PermissionFlagsBits.Connect],
           },
         ],
       });

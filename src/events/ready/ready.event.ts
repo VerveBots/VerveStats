@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CategoryModel } from "@/schemas/category.js";
 import Event from "@/structures/Event.js";
-import { PermissionFlagsBits } from "discord.js";
+import { GuildChannel, PermissionFlagsBits } from "discord.js";
 import cron from "node-cron";
 
 export default new Event({
@@ -30,17 +30,20 @@ export default new Event({
           force: true,
         });
         if (!category.membersChannelId) return;
-        const membersChannel = client.channels.cache.get(
+        let membersChannel = client.channels.cache.get(
           category.membersChannelId
         );
         if (!membersChannel) return;
         if (membersChannel.isDMBased()) return;
         const { me } = membersChannel.guild.members;
         if (!me) return;
+        if (!membersChannel.isVoiceBased() || !membersChannel.isTextBased())
+          return;
         if (
-          !membersChannel
-            .permissionsFor(me)
-            .has(PermissionFlagsBits.ManageChannels)
+          !hasPerms(membersChannel, [
+            PermissionFlagsBits.ManageChannels,
+            PermissionFlagsBits.Connect,
+          ])
         ) {
           return;
         }
@@ -50,11 +53,9 @@ export default new Event({
         );
         if (name === membersChannel.name) return;
         try {
-          await membersChannel.setName(
-            category.membersNameTemplate.replaceAll(
-              "{m}",
-              guild.memberCount.toLocaleString("en-US")
-            )
+          await membersChannel.setName(name);
+          client.logger.info(
+            `Changed name for guild ${membersChannel.guild.name}: ${membersChannel.name} -> ${name}`
           );
         } catch (err) {
           client.logger.error(err);
@@ -63,3 +64,10 @@ export default new Event({
     });
   },
 });
+function hasPerms(channel: GuildChannel, permissions: bigint[]) {
+  const { me } = channel.guild.members;
+  if (!me) return false;
+  return permissions.every((permission) =>
+    channel.permissionsFor(me).has(permission)
+  );
+}
