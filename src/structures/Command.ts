@@ -38,6 +38,7 @@ export default class Command {
   }) {
     this.data = obj.data;
     this.run = obj.run;
+    this.autocomplete = obj.autocomplete;
     return this;
   }
 }

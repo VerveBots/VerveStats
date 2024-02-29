@@ -258,8 +258,8 @@ export default new Command({
     });
     if (!category) return await interaction.respond([]);
     return await interaction.respond(
-      category.channels.map((ch) => ({
-        name: ch.template,
+      category.channels.map((ch, i) => ({
+        name: `${i + 1}. ${ch.template}`,
         value: ch.template,
       }))
     );

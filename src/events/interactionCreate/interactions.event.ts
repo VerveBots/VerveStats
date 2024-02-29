@@ -33,8 +33,8 @@ export default new Event({
       const command = client.commands.find(
         (a) => a.data.name === interaction.commandName
       );
-      if (!command) return;
-      if (command.autocomplete) await command.autocomplete(client, interaction);
+      if (!command || !command.autocomplete) return;
+      await command.autocomplete(client, interaction);
     } else if (interaction.isModalSubmit()) {
       const modal = client.modals.find(
         (a) => a.customId === interaction.customId
