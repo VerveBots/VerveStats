@@ -2,8 +2,16 @@
 
 Open source server stats bot. Creates a category and changes the channel names every 5 minutes.
 
+## Setup
+
+- Invite the bot by clicking [here](https://discord.com/api/oauth2/authorize?client_id=1211917384353447946&permissions=1040&scope=applications.commands%20bot).
+- Use the `/serverstats create` command. Add the optional `name` option if you want to customize the default name of the member count channel.
+
+## Customization
+
+- Use the `/serverstats set-name` command to change the template of a channel.
+
 ## Screenshots
 
-![image](https://github.com/DiscoVote/SimpleServerStats/assets/69511006/80a4aa49-1c2d-4abf-83c1-5bdab2594863)
-![image](https://github.com/DiscoVote/SimpleServerStats/assets/69511006/3b230aff-a26f-4a88-a94c-a94232241f2a)
-
+![image](/assets/screenshot_1.png)
+![image](/assets/screenshot_2.png)
