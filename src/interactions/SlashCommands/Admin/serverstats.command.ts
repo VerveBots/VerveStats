@@ -253,24 +253,15 @@ export default new Command({
     }
   },
   async autocomplete(client, interaction) {
-    const subcommand = interaction.options.getSubcommand();
-    switch (subcommand) {
-      case "set-name": {
-        const focused = interaction.options.getFocused(true);
-        if (focused.name === "channel") {
-          const category = await CategoryModel.findOne({
-            guildId: interaction.guildId,
-          });
-          if (!category) return await interaction.respond([]);
-          return await interaction.respond(
-            category.channels.map((ch) => ({
-              name: ch.template,
-              value: ch.template,
-            }))
-          );
-        }
-        return;
-      }
-    }
+    const category = await CategoryModel.findOne({
+      guildId: interaction.guildId,
+    });
+    if (!category) return await interaction.respond([]);
+    return await interaction.respond(
+      category.channels.map((ch) => ({
+        name: ch.template,
+        value: ch.template,
+      }))
+    );
   },
 });
