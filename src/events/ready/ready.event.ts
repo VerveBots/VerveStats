@@ -3,30 +3,41 @@ import hasPerms from "@/functions/hasPerms.js";
 import replacePrefixes from "@/functions/replacePrefixes.js";
 import { CategoryModel } from "@/schemas/category.js";
 import Event from "@/structures/Event.js";
-import { PermissionFlagsBits } from "discord.js";
+import { ActivityType, PermissionFlagsBits } from "discord.js";
 import cron from "node-cron";
 
 export default new Event({
   event: "ready",
-  run: async (client) => {
-    client.logger.log({
+  run: async (c, client) => {
+    c.logger.log({
       level: "info",
-      message: `Bot logged in as ${client.user?.tag}`,
+      message: `Bot logged in as ${c.user?.tag}`,
     });
-    const commands = client.commands.map((command) => command.data.toJSON());
+    function setStatus() {
+      client.user.setPresence({
+        activities: [
+          {
+            type: ActivityType.Watching,
+            name: `${client.guilds.cache.size} servers`,
+            state: `${client.guilds.cache.size} servers`,
+          },
+        ],
+      });
+    }
+    setStatus();
+    setInterval(setStatus, 60000);
+    const commands = c.commands.map((command) => command.data.toJSON());
     // const contextMenus = client.contextMenus.map((command) =>
     //   command.data.toJSON()
     // );
-    if (client.config.COMMANDS_GUILD_ONLY === "true")
-      await client.guilds.cache
-        .get(client.config.GUILD_ID)
-        ?.commands.set([...commands]);
-    else await client.application?.commands.set([...commands]);
+    if (c.config.COMMANDS_GUILD_ONLY === "true")
+      await c.guilds.cache.get(c.config.GUILD_ID)?.commands.set([...commands]);
+    else await c.application?.commands.set([...commands]);
 
     cron.schedule("*/5 * * * *", async () => {
       const categories = await CategoryModel.find();
       categories.forEach(async (category) => {
-        const guild = await client.guilds.fetch({
+        const guild = await c.guilds.fetch({
           guild: category.guildId,
           withCounts: true,
           force: true,
