@@ -2,6 +2,10 @@
 
 Open source server stats bot. Creates a category and changes the channel names every 5 minutes.
 
+## Support
+
+Join the support server by clicking [here](https://discord.gg/FkCV7Chj87).
+
 ## Setup
 
 - Invite the bot by clicking [here](https://discord.com/api/oauth2/authorize?client_id=1211917384353447946&permissions=1040&scope=applications.commands%20bot).
