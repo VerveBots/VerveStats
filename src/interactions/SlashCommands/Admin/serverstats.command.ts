@@ -21,7 +21,7 @@ export default new Command({
           string
             .setName("name")
             .setDescription(
-              "The name of the channel | {m}: members | {b}: bots | {mc}: {m}+{b}"
+              "The name of the channel. Use /placeholders command to view all placeholders."
             )
         )
     )
@@ -39,7 +39,9 @@ export default new Command({
         .addStringOption((string) =>
           string
             .setName("name")
-            .setDescription("The new name of the channel")
+            .setDescription(
+              "The new name of the channel. Use /placeholders command to view all placeholders."
+            )
             .setRequired(true)
         )
     )
