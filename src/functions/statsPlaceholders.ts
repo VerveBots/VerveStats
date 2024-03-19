@@ -27,12 +27,12 @@ export default async function replaceStatsPlaceholders(
     "{dnd}": guild.presences.cache
       .filter((v) => v.status === "dnd")
       .size.toLocaleString("en-US"),
+    "{idle}": members
+      .filter((v) => v.presence?.status === "idle")
+      .size.toLocaleString("en-US"),
     "{offline}": (
       guild.memberCount -
       guild.presences.cache.filter((v) => v.status !== "offline").size
     ).toLocaleString("en-US"),
-    "{idle}": members
-      .filter((v) => v.presence?.status === "idle")
-      .size.toLocaleString("en-US"),
   });
 }

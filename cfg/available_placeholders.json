@@ -1,0 +1,58 @@
+[
+  {
+    "name": "{mc}",
+    "description": "Total server member count"
+  },
+  {
+    "name": "{m}",
+    "description": "Number of non-bot members in the server"
+  },
+  {
+    "name": "{b}",
+    "description": "Number of bot members in the server"
+  },
+  {
+    "name": "{c}",
+    "description": "Total number of channels in the server"
+  },
+  {
+    "name": "{r}",
+    "description": "Total number of roles in the server"
+  },
+  {
+    "name": "{boosts}",
+    "description": "Number of server boosts"
+  },
+  {
+    "name": "{o}",
+    "description": "Number of non-offline (online, idle, dnd) status members in the server"
+  },
+  {
+    "name": "{online}",
+    "description": "Number of members with online status in the server"
+  },
+  {
+    "name": "{dnd}",
+    "description": "Number of members with dnd status in the server"
+  },
+  {
+    "name": "{idle}",
+    "description": "Number of members with idle status in the server"
+  },
+  {
+    "name": "{offline}",
+    "description": "Number of members with offline status in the server"
+  },
+  {
+    "name": "{mc}",
+    "description": "Total server member count"
+  },
+  {
+    "name": "{mc}",
+    "description": "Total server member count"
+  },
+  {
+    "name": "{mc}",
+    "description": "Total server member count"
+  }
+]
