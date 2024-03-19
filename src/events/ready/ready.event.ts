@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import hasPerms from "@/functions/hasPerms.js";
-import replacePrefixes from "@/functions/replacePrefixes.js";
+import replaceStatsPlaceholders from "@/functions/statsPlaceholders.js";
 import { CategoryModel } from "@/schemas/category.js";
 import Event from "@/structures/Event.js";
 import { ActivityType, PermissionFlagsBits } from "discord.js";
@@ -37,11 +37,8 @@ export default new Event({
     cron.schedule("*/5 * * * *", async () => {
       const categories = await CategoryModel.find();
       categories.forEach(async (category) => {
-        const guild = await c.guilds.fetch({
-          guild: category.guildId,
-          withCounts: true,
-          force: true,
-        });
+        const guild = c.guilds.cache.get(category.guildId);
+        if (!guild) return;
         category.channels.forEach(async (ch, i) => {
           const channel = guild.channels.cache.get(ch.channelId);
           if (!channel) {
@@ -65,17 +62,7 @@ export default new Event({
           )
             return;
 
-          const members = await guild.members.fetch();
-
-          const name = replacePrefixes(ch.template, {
-            "{mc}": guild.memberCount.toLocaleString("en-US"),
-            "{m}": members
-              .filter((m) => !m.user.bot)
-              .size.toLocaleString("en-US"),
-            "{b}": members
-              .filter((m) => m.user.bot)
-              .size.toLocaleString("en-US"),
-          });
+          const name = await replaceStatsPlaceholders(ch.template, guild);
           if (name === channel.name) return;
 
           try {

@@ -1,5 +1,5 @@
 import hasPerms from "@/functions/hasPerms.js";
-import replacePrefixes from "@/functions/replacePrefixes.js";
+import replaceStatsPlaceholders from "@/functions/statsPlaceholders.js";
 import { CategoryModel } from "@/schemas/category.js";
 import Command from "@/structures/Command.js";
 import {
@@ -134,25 +134,11 @@ export default new Command({
             .map((v) => `${v} ${messages[v as keyof typeof messages]}`)
             .join("\n")
         );
-        const guild = await interaction.client.guilds.fetch({
-          guild: interaction.guildId,
-          withCounts: true,
-          force: true,
-        });
 
-        const members = await guild.members.fetch();
         const channel = await categoryChannel.children
           .create({
             type: ChannelType.GuildVoice,
-            name: replacePrefixes(name, {
-              "{mc}": guild.memberCount.toLocaleString("en-US"),
-              "{m}": members
-                .filter((m) => !m.user.bot)
-                .size.toLocaleString("en-US"),
-              "{b}": members
-                .filter((m) => m.user.bot)
-                .size.toLocaleString("en-US"),
-            }),
+            name: await replaceStatsPlaceholders(name, interaction.guild),
             reason: `${interaction.user.tag} created a ServerStats channel`,
             permissionOverwrites: [
               {
@@ -225,23 +211,9 @@ export default new Command({
             "Need `Manage Channels` and `Connect` permissions in that channel"
           );
         }
-        const guild = await interaction.client.guilds.fetch({
-          guild: interaction.guildId,
-          withCounts: true,
-          force: true,
-        });
-        const members = await guild.members.fetch();
         try {
           await ch.setName(
-            replacePrefixes(name, {
-              "{mc}": guild.memberCount.toLocaleString("en-US"),
-              "{m}": members
-                .filter((m) => !m.user.bot)
-                .size.toLocaleString("en-US"),
-              "{b}": members
-                .filter((m) => m.user.bot)
-                .size.toLocaleString("en-US"),
-            })
+            await replaceStatsPlaceholders(name, interaction.guild)
           );
           await interaction.editReply("Done");
         } catch (error) {

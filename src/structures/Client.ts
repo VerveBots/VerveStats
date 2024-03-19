@@ -42,7 +42,11 @@ export default class Client extends BaseClient {
   });
   constructor() {
     super({
-      intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+      intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildPresences,
+      ],
     });
     if (process.env.NODE_ENV !== "production") {
       this.logger.add(
