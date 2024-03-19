@@ -42,17 +42,5 @@
   {
     "name": "{offline}",
     "description": "Number of members with offline status in the server"
-  },
-  {
-    "name": "{mc}",
-    "description": "Total server member count"
-  },
-  {
-    "name": "{mc}",
-    "description": "Total server member count"
-  },
-  {
-    "name": "{mc}",
-    "description": "Total server member count"
   }
 ]
