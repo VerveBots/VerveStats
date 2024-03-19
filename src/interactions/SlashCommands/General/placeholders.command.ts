@@ -11,7 +11,7 @@ export default new Command({
         new EmbedBuilder()
           .setTitle(`All Placeholders`)
           .setDescription(
-            `Total placeholders - ${availablePlaceholders.length}\n\n${availablePlaceholders.map(v => `**${v.name}** - ${v.description}`)}`
+            `Total placeholders - ${availablePlaceholders.length}\n\n${availablePlaceholders.map((v) => `**${v.name}** - ${v.description}`).join("\n")}`
           ),
       ],
     });
