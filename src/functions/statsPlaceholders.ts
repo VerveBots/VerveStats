@@ -1,4 +1,4 @@
-import { Guild } from "discord.js";
+import { Guild, PermissionFlagsBits } from "discord.js";
 import replacePlaceholders from "./replacePlaceholders.js";
 
 export default async function replaceStatsPlaceholders(
@@ -34,5 +34,14 @@ export default async function replaceStatsPlaceholders(
       guild.memberCount -
       guild.presences.cache.filter((v) => v.status !== "offline").size
     ).toLocaleString("en-US"),
+    "{admins}": members
+      .filter((v) => v.permissions.has(PermissionFlagsBits.Administrator))
+      .size.toLocaleString("en-US"),
+    "{managers}": members
+      .filter((v) => v.permissions.has(PermissionFlagsBits.ManageGuild))
+      .size.toLocaleString("en-US"),
+    "{moderators}": members
+      .filter((v) => v.permissions.has(PermissionFlagsBits.ManageMessages))
+      .size.toLocaleString("en-US"),
   });
 }

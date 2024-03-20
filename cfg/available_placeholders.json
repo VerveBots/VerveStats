@@ -42,5 +42,17 @@
   {
     "name": "{offline}",
     "description": "Number of members with offline status in the server"
+  },
+  {
+    "name": "{admins}",
+    "description": "Number of members with the Administrator permission in the server"
+  },
+  {
+    "name": "{managers}",
+    "description": "Number of members with the Manage Server permission in the server"
+  },
+  {
+    "name": "{moderators}",
+    "description": "Number of members with the Manage Messages permission in the server"
   }
 ]
